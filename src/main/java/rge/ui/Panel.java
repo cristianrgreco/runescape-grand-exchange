@@ -14,15 +14,10 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
-import java.net.URLDecoder;
-import java.util.Base64;
 
 public class Panel extends JPanel {
     private static final Image WINDOW_BACKGROUND;
@@ -188,32 +183,6 @@ public class Panel extends JPanel {
     }
 
     private Image downloadItemImage() {
-        if (searchResult.imageUrl.startsWith("http")) {
-            return downloadImageFromUrl();
-        } else {
-            return downloadImageFromBase64String();
-        }
-    }
-
-    private Image downloadImageFromBase64String() {
-        String imageUrl;
-        try {
-            imageUrl = URLDecoder.decode(searchResult.imageUrl, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-
-        String imageBytes = imageUrl.substring(imageUrl.indexOf(",") + 1);
-        InputStream stream = new ByteArrayInputStream(Base64.getDecoder().decode(imageBytes.getBytes()));
-
-        try {
-            return ImageIO.read(stream);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private Image downloadImageFromUrl() {
         try {
             return ImageIO.read(new URL(searchResult.imageUrl));
         } catch (IOException e) {

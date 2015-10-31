@@ -6,7 +6,6 @@ import rge.engine.GrandExchange;
 import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.startsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.CombinableMatcher.both;
@@ -30,7 +29,7 @@ public class GrandExchangeTest {
 
     @Test
     public void fetchesItemImage1() throws IOException {
-        assertThat(GrandExchange.get("Santa hat").imageUrl, startsWith("data:image/gif;base64"));
+        assertThat(GrandExchange.get("Santa hat").imageUrl, both(containsString("http://")).and(containsString("Santa_hat.png")));
     }
 
     @Test

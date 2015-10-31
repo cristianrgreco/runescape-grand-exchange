@@ -16,7 +16,7 @@ public class GrandExchange {
     public static Item get(String itemName) throws IOException {
         String requestUrl = createRequestUrl(itemName);
         Document document = downloadWebDocument(requestUrl);
-        Element imgElement = document.select(".wikitable.infobox .infoboximage a.image img").first();
+        Element imgElement = parseImageElement(document);
 
         String price = parseItemPrice(document);
         String imageUrl = parseImageUrl(imgElement);
@@ -31,6 +31,14 @@ public class GrandExchange {
 
     private static Document downloadWebDocument(String requestUrl) throws IOException {
         return Jsoup.connect(requestUrl).get();
+    }
+
+    private static Element parseImageElement(Document document) {
+        Element imgElement = document.select(".wikitable.infobox .infoboximage a.image img").first();
+        if (imgElement.attr("src").startsWith("data:")) {
+            imgElement = document.select(".wikitable.infobox .infoboximage a.image noscript img").first();
+        }
+        return imgElement;
     }
 
     private static String parseItemPrice(Document document) {
