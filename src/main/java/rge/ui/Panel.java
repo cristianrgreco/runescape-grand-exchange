@@ -44,7 +44,8 @@ public class Panel extends JPanel {
 
     private static final int TEXT_BOX_WIDTH = Window.SIZE.width - (WINDOW_PADDING * 4);
     private static final int TEXT_BOX_HEIGHT = 30;
-    private static final int TEXT_BOX_PADDING = 5;
+    private static final int TEXT_BOX_Y_PADDING = 5;
+    private static final int TEXT_BOX_X_PADDING = 15;
 
     private StringBuilder searchText = new StringBuilder();
 
@@ -58,15 +59,19 @@ public class Panel extends JPanel {
 
                 char keyChar = e.getKeyChar();
 
-                if (isValidCharacter(keyChar)) {
+                if (isEnterCharacter(e) && searchText.length() > 0) {
+                    System.out.println("search");
+                } else if (isValidCharacter(keyChar)) {
                     searchText.append(keyChar);
                     repaint();
-                }
-
-                if (isBackspaceCharacter(e) && searchText.length() > 0) {
+                } else if (isBackspaceCharacter(e) && searchText.length() > 0) {
                     searchText.deleteCharAt(searchText.length() - 1);
                     repaint();
                 }
+            }
+
+            private boolean isEnterCharacter(KeyEvent e) {
+                return (int) e.getKeyChar() == 10;
             }
 
             private boolean isValidCharacter(char keyChar) {
@@ -107,17 +112,17 @@ public class Panel extends JPanel {
     private void drawSearchText(Graphics2D g2d) {
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g2d.setColor(Color.decode("#3F3F3F"));
-        g2d.setFont(CUSTOM_FONT.deriveFont((float) 40 - (TEXT_BOX_PADDING * 3)));
+        g2d.setFont(CUSTOM_FONT.deriveFont((float) 40 - (TEXT_BOX_Y_PADDING * 3)));
 
         String searchText = fitTextToSearchBox(g2d);
         g2d.drawString(
                 searchText,
-                (WINDOW_PADDING * 2) + TEXT_BOX_PADDING,
-                WINDOW_PADDING * 2 + TEXT_BOX_HEIGHT - TEXT_BOX_PADDING);
+                (WINDOW_PADDING * 2) + TEXT_BOX_X_PADDING,
+                WINDOW_PADDING * 2 + TEXT_BOX_HEIGHT - TEXT_BOX_Y_PADDING);
     }
 
     private String fitTextToSearchBox(Graphics2D g2d) {
-        int textBoxBounds = TEXT_BOX_WIDTH - (TEXT_BOX_PADDING * 3);
+        int textBoxBounds = TEXT_BOX_WIDTH - (int)(TEXT_BOX_X_PADDING * 1.5);
 
         String searchText = this.searchText.toString();
         while (g2d.getFontMetrics().stringWidth(searchText) > textBoxBounds) {
