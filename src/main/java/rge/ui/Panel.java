@@ -108,6 +108,7 @@ public class Panel extends JPanel {
         drawSearchText(g2d);
 
         if (searchResult != null) {
+            drawItemContainer(g2d);
             drawItemName(g2d);
             drawItemPrice(g2d);
             drawItemImage(g2d);
@@ -155,12 +156,17 @@ public class Panel extends JPanel {
         return searchText;
     }
 
+    private void drawItemContainer(Graphics2D g2d) {
+        g2d.setColor(new Color(0f, 0f, 0f, 0.5f));
+        g2d.fillRoundRect(WINDOW_PADDING * 2, WINDOW_PADDING * 4, TEXT_BOX_WIDTH, Window.SIZE.height - (WINDOW_PADDING * 7), 5, 5);
+    }
+
     private void drawItemName(Graphics2D g2d) {
         g2d.setColor(Color.YELLOW);
         g2d.setFont(new Font("sans-serif", Font.BOLD, 14));
         g2d.drawString(
                 searchResult.name,
-                WINDOW_PADDING * 2,
+                WINDOW_PADDING * 3,
                 (WINDOW_PADDING * 3) + TEXT_BOX_HEIGHT + (TEXT_BOX_Y_PADDING * 2));
     }
 
@@ -169,15 +175,25 @@ public class Panel extends JPanel {
         g2d.setFont(new Font("sans-serif", Font.BOLD, 14));
         g2d.drawString(
                 searchResult.price + " coins",
-                WINDOW_PADDING * 2,
+                WINDOW_PADDING * 3,
                 (WINDOW_PADDING * 4) + TEXT_BOX_HEIGHT + (TEXT_BOX_Y_PADDING * 2));
     }
 
     private void drawItemImage(Graphics2D g2d) {
+        int containerPadding = 4;
+
         Image itemImage = downloadItemImage();
+        g2d.setColor(new Color(1f, 1f, 1f, 0.9f));
+        g2d.fillRoundRect(
+                Window.SIZE.width - (WINDOW_PADDING * 3) - itemImage.getWidth(this),
+                (WINDOW_PADDING * 4) + TEXT_BOX_HEIGHT + (TEXT_BOX_Y_PADDING * 2) - itemImage.getHeight(this) - (containerPadding / 2),
+                itemImage.getWidth(this) + containerPadding,
+                itemImage.getHeight(this) + containerPadding,
+                5,
+                5);
         g2d.drawImage(
                 itemImage,
-                Window.SIZE.width - (WINDOW_PADDING * 2) - itemImage.getWidth(this),
+                Window.SIZE.width - (WINDOW_PADDING * 3) - itemImage.getWidth(this) + (containerPadding / 2),
                 (WINDOW_PADDING * 4) + TEXT_BOX_HEIGHT + (TEXT_BOX_Y_PADDING * 2) - itemImage.getHeight(this),
                 this);
     }
