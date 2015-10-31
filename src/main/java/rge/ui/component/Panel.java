@@ -115,7 +115,7 @@ public class Panel extends JPanel {
         g2d.drawString(
                 searchResult.name,
                 WINDOW_PADDING * 3,
-                (WINDOW_PADDING * 3) + TEXT_BOX_HEIGHT + (TEXT_BOX_Y_PADDING * 2));
+                (WINDOW_PADDING * 3) + TEXT_BOX_HEIGHT + (TEXT_BOX_Y_PADDING * 2) + ITEM_IMAGE_CONTAINER_PADDING);
     }
 
     private void drawItemPrice(Graphics2D g2d) {
