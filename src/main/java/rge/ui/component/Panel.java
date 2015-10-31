@@ -1,7 +1,7 @@
 package rge.ui.component;
 
-import rge.engine.GrandExchange;
 import rge.engine.Item;
+import rge.ui.listener.SearchControls;
 import rge.util.ResourceLoader;
 
 import javax.imageio.ImageIO;
@@ -12,8 +12,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.URL;
 
@@ -34,7 +32,15 @@ public class Panel extends JPanel {
     public Panel() {
         setDoubleBuffered(true);
         setFocusable(true);
-        addKeyListener(new KeyboardControls());
+        addKeyListener(new SearchControls(this));
+    }
+
+    public StringBuilder getSearchText() {
+        return searchText;
+    }
+
+    public void setSearchResult(Item searchResult) {
+        this.searchResult = searchResult;
     }
 
     @Override
@@ -143,46 +149,6 @@ public class Panel extends JPanel {
             return ImageIO.read(new URL(searchResult.imageUrl));
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    private class KeyboardControls extends KeyAdapter {
-        @Override
-        public void keyTyped(KeyEvent e) {
-            super.keyTyped(e);
-
-            char keyChar = e.getKeyChar();
-
-            if (isEnterCharacter(e) && searchText.length() > 0) {
-                searchResult = search();
-                repaint();
-            } else if (isValidCharacter(keyChar)) {
-                searchText.append(keyChar);
-                repaint();
-            } else if (isBackspaceCharacter(e) && searchText.length() > 0) {
-                searchText.deleteCharAt(searchText.length() - 1);
-                repaint();
-            }
-        }
-
-        private Item search() {
-            try {
-                return GrandExchange.get(searchText.toString());
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        }
-
-        private boolean isEnterCharacter(KeyEvent e) {
-            return (int) e.getKeyChar() == 10;
-        }
-
-        private boolean isValidCharacter(char keyChar) {
-            return Character.isAlphabetic(keyChar) || Character.isSpaceChar(keyChar);
-        }
-
-        private boolean isBackspaceCharacter(KeyEvent e) {
-            return (int) e.getKeyChar() == 8;
         }
     }
 }
