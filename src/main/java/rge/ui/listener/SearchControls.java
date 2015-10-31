@@ -21,8 +21,6 @@ public class SearchControls extends KeyAdapter {
 
         char keyChar = e.getKeyChar();
 
-        System.out.println(e);
-
         if (isEnterCharacter(e) && panel.getSearchText().length() > 0) {
             panel.setSearchResult(search());
             panel.repaint();

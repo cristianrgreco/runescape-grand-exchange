@@ -88,9 +88,9 @@ public class Panel extends JPanel {
 
         String searchText = fitTextToSearchBox(g2d);
         g2d.drawString(
-                searchText,
+                searchText.toUpperCase(),
                 (WINDOW_PADDING * 2) + TEXT_BOX_X_PADDING,
-                WINDOW_PADDING * 2 + TEXT_BOX_HEIGHT - TEXT_BOX_Y_PADDING);
+                WINDOW_PADDING * 2 + TEXT_BOX_HEIGHT - (int) (TEXT_BOX_Y_PADDING * 1.5));
     }
 
     private String fitTextToSearchBox(Graphics2D g2d) {
@@ -111,7 +111,7 @@ public class Panel extends JPanel {
 
     private void drawItemName(Graphics2D g2d) {
         g2d.setColor(Color.YELLOW);
-        g2d.setFont(new Font("sans-serif", Font.BOLD, 14));
+        g2d.setFont(CUSTOM_FONT.deriveFont((float) 16));
         g2d.drawString(
                 searchResult.name,
                 WINDOW_PADDING * 3,
@@ -120,7 +120,7 @@ public class Panel extends JPanel {
 
     private void drawItemPrice(Graphics2D g2d) {
         g2d.setColor(Color.YELLOW);
-        g2d.setFont(new Font("sans-serif", Font.BOLD, 14));
+        g2d.setFont(CUSTOM_FONT.deriveFont((float) 16));
         g2d.drawString(
                 searchResult.price + " coins",
                 WINDOW_PADDING * 3,
