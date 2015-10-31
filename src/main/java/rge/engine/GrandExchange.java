@@ -2,7 +2,7 @@ package rge.engine;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
+import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 
@@ -15,7 +15,7 @@ public class GrandExchange {
     public static Item get(String itemName) throws IOException {
         String requestUrl = createRequestUrl(itemName);
         Document document = downloadWebDocument(requestUrl);
-        Elements imgElement = document.select(".wikitable.infobox td noscript img");
+        Element imgElement = document.select(".wikitable.infobox .infoboximage a.image img").first();
 
         String price = parseItemPrice(document);
         String imageUrl = parseImageUrl(imgElement);
@@ -36,11 +36,11 @@ public class GrandExchange {
         return document.select("#GEPrice .GEItem > span").first().text();
     }
 
-    private static String parseImageUrl(Elements imgElement) {
+    private static String parseImageUrl(Element imgElement) {
         return imgElement.attr("src");
     }
 
-    private static String parseImageName(Elements imgElement) {
+    private static String parseImageName(Element imgElement) {
         return imgElement.attr("alt");
     }
 }

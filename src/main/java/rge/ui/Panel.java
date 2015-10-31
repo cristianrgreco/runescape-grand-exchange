@@ -1,5 +1,8 @@
 package rge.ui;
 
+import rge.engine.GrandExchange;
+import rge.engine.Item;
+
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import java.awt.Color;
@@ -60,13 +63,21 @@ public class Panel extends JPanel {
                 char keyChar = e.getKeyChar();
 
                 if (isEnterCharacter(e) && searchText.length() > 0) {
-                    System.out.println("search");
+                    Item grandExchangeItem = search();
                 } else if (isValidCharacter(keyChar)) {
                     searchText.append(keyChar);
                     repaint();
                 } else if (isBackspaceCharacter(e) && searchText.length() > 0) {
                     searchText.deleteCharAt(searchText.length() - 1);
                     repaint();
+                }
+            }
+
+            private Item search() {
+                try {
+                    return GrandExchange.get(searchText.toString());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
             }
 
@@ -122,7 +133,7 @@ public class Panel extends JPanel {
     }
 
     private String fitTextToSearchBox(Graphics2D g2d) {
-        int textBoxBounds = TEXT_BOX_WIDTH - (int)(TEXT_BOX_X_PADDING * 1.5);
+        int textBoxBounds = TEXT_BOX_WIDTH - (int) (TEXT_BOX_X_PADDING * 1.5);
 
         String searchText = this.searchText.toString();
         while (g2d.getFontMetrics().stringWidth(searchText) > textBoxBounds) {
