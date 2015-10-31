@@ -46,4 +46,9 @@ public class GrandExchangeTest {
     public void fetchesGrandExchangePrice2() throws IOException {
         assertThat(GrandExchange.get("Bandos godsword").price, notNullValue());
     }
+
+    @Test
+    public void fetchesGrandExchangePrice3() throws IOException {
+        assertThat(GrandExchange.get("Crystal seed").price, equalTo("Not sold"));
+    }
 }

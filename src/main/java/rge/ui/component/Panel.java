@@ -1,5 +1,6 @@
 package rge.ui.component;
 
+import rge.engine.GrandExchange;
 import rge.engine.Item;
 import rge.ui.listener.SearchControls;
 import rge.util.ResourceLoader;
@@ -122,7 +123,7 @@ public class Panel extends JPanel {
         g2d.setColor(Color.YELLOW);
         g2d.setFont(CUSTOM_FONT.deriveFont((float) 16));
         g2d.drawString(
-                searchResult.price + " coins",
+                searchResult.price + (GrandExchange.NOT_SOLD_TEXT.equals(searchResult.price) ? "" : " coins"),
                 WINDOW_PADDING * 3,
                 (WINDOW_PADDING * 4) + TEXT_BOX_HEIGHT + (TEXT_BOX_Y_PADDING * 2));
     }

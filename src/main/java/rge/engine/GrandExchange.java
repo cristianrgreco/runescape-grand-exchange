@@ -8,6 +8,8 @@ import org.jsoup.nodes.Element;
 import java.io.IOException;
 
 public class GrandExchange {
+    public static final String NOT_SOLD_TEXT = "Not sold";
+
     private static final String BASE_URL = "http://runescape.wikia.com/wiki/";
 
     private GrandExchange() {
@@ -42,7 +44,11 @@ public class GrandExchange {
     }
 
     private static String parseItemPrice(Document document) {
-        return document.select("#GEPrice .GEItem > span").first().text();
+        Element priceElement = document.select("#GEPrice .GEItem > span").first();
+        if (priceElement == null) {
+            return NOT_SOLD_TEXT;
+        }
+        return priceElement.text();
     }
 
     private static String parseImageUrl(Element imgElement) {
