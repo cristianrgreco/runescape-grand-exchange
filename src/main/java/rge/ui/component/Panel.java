@@ -26,6 +26,8 @@ public class Panel extends JPanel {
     private static final int TEXT_BOX_Y_PADDING = 5;
     private static final int TEXT_BOX_X_PADDING = 15;
 
+    private static final int ITEM_IMAGE_CONTAINER_PADDING = 4;
+
     private StringBuilder searchText = new StringBuilder();
     private Item searchResult;
 
@@ -126,22 +128,26 @@ public class Panel extends JPanel {
     }
 
     private void drawItemImage(Graphics2D g2d) {
-        int containerPadding = 4;
-
         Image itemImage = downloadItemImage();
+
+        drawItemImageContainer(itemImage, g2d);
+
+        g2d.drawImage(
+                itemImage,
+                Window.SIZE.width - (WINDOW_PADDING * 3) - itemImage.getWidth(this) + (ITEM_IMAGE_CONTAINER_PADDING / 2),
+                (WINDOW_PADDING * 4) + TEXT_BOX_HEIGHT + (TEXT_BOX_Y_PADDING * 2) - itemImage.getHeight(this),
+                this);
+    }
+
+    private void drawItemImageContainer(Image itemImage, Graphics2D g2d) {
         g2d.setColor(new Color(1f, 1f, 1f, 0.9f));
         g2d.fillRoundRect(
                 Window.SIZE.width - (WINDOW_PADDING * 3) - itemImage.getWidth(this),
-                (WINDOW_PADDING * 4) + TEXT_BOX_HEIGHT + (TEXT_BOX_Y_PADDING * 2) - itemImage.getHeight(this) - (containerPadding / 2),
-                itemImage.getWidth(this) + containerPadding,
-                itemImage.getHeight(this) + containerPadding,
+                (WINDOW_PADDING * 4) + TEXT_BOX_HEIGHT + (TEXT_BOX_Y_PADDING * 2) - itemImage.getHeight(this) - (ITEM_IMAGE_CONTAINER_PADDING / 2),
+                itemImage.getWidth(this) + ITEM_IMAGE_CONTAINER_PADDING,
+                itemImage.getHeight(this) + ITEM_IMAGE_CONTAINER_PADDING,
                 5,
                 5);
-        g2d.drawImage(
-                itemImage,
-                Window.SIZE.width - (WINDOW_PADDING * 3) - itemImage.getWidth(this) + (containerPadding / 2),
-                (WINDOW_PADDING * 4) + TEXT_BOX_HEIGHT + (TEXT_BOX_Y_PADDING * 2) - itemImage.getHeight(this),
-                this);
     }
 
     private Image downloadItemImage() {
