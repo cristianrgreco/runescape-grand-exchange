@@ -21,15 +21,17 @@ public class SearchControls extends KeyAdapter {
 
         char keyChar = e.getKeyChar();
 
-        if (isEnterCharacter(e) && panel.getSearchText().length() > 0) {
-            panel.setSearchResult(search());
-            panel.repaint();
-        } else if (isValidCharacter(keyChar)) {
-            panel.getSearchText().append(keyChar);
-            panel.repaint();
-        } else if (isBackspaceCharacter(e) && panel.getSearchText().length() > 0) {
-            panel.getSearchText().deleteCharAt(panel.getSearchText().length() - 1);
-            panel.repaint();
+        synchronized (SearchControls.class) {
+            if (isEnterCharacter(e) && panel.getSearchText().length() > 0) {
+                panel.setSearchResult(search());
+                panel.repaint();
+            } else if (isValidCharacter(keyChar)) {
+                panel.getSearchText().append(keyChar);
+                panel.repaint();
+            } else if (isBackspaceCharacter(e) && panel.getSearchText().length() > 0) {
+                panel.getSearchText().deleteCharAt(panel.getSearchText().length() - 1);
+                panel.repaint();
+            }
         }
     }
 
