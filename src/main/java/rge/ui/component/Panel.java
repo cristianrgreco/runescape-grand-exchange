@@ -133,18 +133,27 @@ public class Panel extends JPanel {
 
         drawItemImageContainer(itemImage, g2d);
 
+        int containerHeight = Window.SIZE.height - (WINDOW_PADDING * 7);
+        int imageHeight = itemImage.getHeight(this);
+        int topOfContainer = WINDOW_PADDING * 4;
+
         g2d.drawImage(
                 itemImage,
                 Window.SIZE.width - (WINDOW_PADDING * 3) - itemImage.getWidth(this) + (ITEM_IMAGE_CONTAINER_PADDING / 2),
-                (WINDOW_PADDING * 4) + TEXT_BOX_HEIGHT + (TEXT_BOX_Y_PADDING * 2) - itemImage.getHeight(this),
+                (ITEM_IMAGE_CONTAINER_PADDING / 2) + topOfContainer + ((containerHeight - imageHeight) / 2) - (ITEM_IMAGE_CONTAINER_PADDING / 2),
                 this);
     }
 
     private void drawItemImageContainer(Image itemImage, Graphics2D g2d) {
         g2d.setColor(new Color(1f, 1f, 1f, 0.9f));
+
+        int containerHeight = Window.SIZE.height - (WINDOW_PADDING * 7);
+        int imageHeight = itemImage.getHeight(this);
+        int topOfContainer = WINDOW_PADDING * 4;
+
         g2d.fillRoundRect(
                 Window.SIZE.width - (WINDOW_PADDING * 3) - itemImage.getWidth(this),
-                (WINDOW_PADDING * 4) + TEXT_BOX_HEIGHT + (TEXT_BOX_Y_PADDING * 2) - itemImage.getHeight(this) - (ITEM_IMAGE_CONTAINER_PADDING / 2),
+                topOfContainer + ((containerHeight - imageHeight) / 2) - (ITEM_IMAGE_CONTAINER_PADDING / 2),
                 itemImage.getWidth(this) + ITEM_IMAGE_CONTAINER_PADDING,
                 itemImage.getHeight(this) + ITEM_IMAGE_CONTAINER_PADDING,
                 5,
