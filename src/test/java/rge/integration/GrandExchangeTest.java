@@ -24,6 +24,11 @@ public class GrandExchangeTest {
     }
 
     @Test
+    public void fetchesItemNameSpecialEncoding() throws IOException {
+        assertThat(GrandExchange.get("Red h'ween Mask").name, equalTo("Red h'ween mask"));
+    }
+
+    @Test
     public void fetchesItemImage1() throws IOException {
         assertThat(GrandExchange.get("Santa hat").imageUrl, startsWith("data:image/gif;base64"));
     }

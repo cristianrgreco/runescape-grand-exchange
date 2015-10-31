@@ -1,5 +1,6 @@
 package rge.engine;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -19,7 +20,7 @@ public class GrandExchange {
 
         String price = parseItemPrice(document);
         String imageUrl = parseImageUrl(imgElement);
-        String name = parseImageName(imgElement);
+        String name = parseItemName(imgElement);
 
         return new Item(name, price, imageUrl);
     }
@@ -40,7 +41,7 @@ public class GrandExchange {
         return imgElement.attr("src");
     }
 
-    private static String parseImageName(Element imgElement) {
-        return imgElement.attr("alt");
+    private static String parseItemName(Element imgElement) {
+        return StringEscapeUtils.unescapeHtml3(imgElement.attr("alt"));
     }
 }

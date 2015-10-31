@@ -10,17 +10,22 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
+import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.util.Base64;
 
 public class Panel extends JPanel {
-    private static final BufferedImage WINDOW_BACKGROUND;
+    private static final Image WINDOW_BACKGROUND;
     private static final Font CUSTOM_FONT;
 
     static {
@@ -110,6 +115,7 @@ public class Panel extends JPanel {
         if (searchResult != null) {
             drawItemName(g2d);
             drawItemPrice(g2d);
+            drawItemImage(g2d);
         }
     }
 
@@ -119,7 +125,11 @@ public class Panel extends JPanel {
 
     private void drawContainer(Graphics2D g2d) {
         g2d.setColor(new Color(1f, 1f, 1f, 0.25f));
-        g2d.fillRoundRect(WINDOW_PADDING, WINDOW_PADDING, Window.SIZE.width - (WINDOW_PADDING * 2), Window.SIZE.height - (WINDOW_PADDING * 3), 5, 5);
+        g2d.fillRoundRect(
+                WINDOW_PADDING,
+                WINDOW_PADDING,
+                Window.SIZE.width - (WINDOW_PADDING * 2),
+                Window.SIZE.height - (WINDOW_PADDING * 3), 5, 5);
     }
 
     private void drawSearchBox(Graphics2D g2d) {
@@ -166,5 +176,48 @@ public class Panel extends JPanel {
                 searchResult.price + " coins",
                 WINDOW_PADDING * 2,
                 (WINDOW_PADDING * 4) + TEXT_BOX_HEIGHT + (TEXT_BOX_Y_PADDING * 2));
+    }
+
+    private void drawItemImage(Graphics2D g2d) {
+        Image itemImage = downloadItemImage();
+        g2d.drawImage(
+                itemImage,
+                Window.SIZE.width - (WINDOW_PADDING * 2) - itemImage.getWidth(this),
+                (WINDOW_PADDING * 4) + TEXT_BOX_HEIGHT + (TEXT_BOX_Y_PADDING * 2) - itemImage.getHeight(this),
+                this);
+    }
+
+    private Image downloadItemImage() {
+        if (searchResult.imageUrl.startsWith("http")) {
+            return downloadImageFromUrl();
+        } else {
+            return downloadImageFromBase64String();
+        }
+    }
+
+    private Image downloadImageFromBase64String() {
+        String imageUrl;
+        try {
+            imageUrl = URLDecoder.decode(searchResult.imageUrl, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+
+        String imageBytes = imageUrl.substring(imageUrl.indexOf(",") + 1);
+        InputStream stream = new ByteArrayInputStream(Base64.getDecoder().decode(imageBytes.getBytes()));
+
+        try {
+            return ImageIO.read(stream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Image downloadImageFromUrl() {
+        try {
+            return ImageIO.read(new URL(searchResult.imageUrl));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
