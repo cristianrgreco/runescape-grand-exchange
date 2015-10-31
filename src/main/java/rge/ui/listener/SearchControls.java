@@ -21,6 +21,8 @@ public class SearchControls extends KeyAdapter {
 
         char keyChar = e.getKeyChar();
 
+        System.out.println(e);
+
         if (isEnterCharacter(e) && panel.getSearchText().length() > 0) {
             panel.setSearchResult(search());
             panel.repaint();
@@ -46,7 +48,7 @@ public class SearchControls extends KeyAdapter {
     }
 
     private boolean isValidCharacter(char keyChar) {
-        return Character.isAlphabetic(keyChar) || Character.isSpaceChar(keyChar);
+        return Character.isAlphabetic(keyChar) || Character.isDigit(keyChar) || Character.isSpaceChar(keyChar);
     }
 
     private boolean isBackspaceCharacter(KeyEvent e) {
