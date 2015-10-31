@@ -1,4 +1,4 @@
-package rge.ui;
+package rge.ui.component;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;

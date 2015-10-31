@@ -1,7 +1,7 @@
 package rge;
 
-import rge.ui.Panel;
-import rge.ui.Window;
+import rge.ui.component.Panel;
+import rge.ui.component.Window;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;

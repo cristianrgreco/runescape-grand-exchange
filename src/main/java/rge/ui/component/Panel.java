@@ -1,4 +1,4 @@
-package rge.ui;
+package rge.ui.component;
 
 import rge.engine.GrandExchange;
 import rge.engine.Item;
