@@ -2,6 +2,7 @@ package rge.ui.component;
 
 import rge.engine.GrandExchange;
 import rge.engine.Item;
+import rge.ui.listener.CursorListener;
 import rge.ui.listener.SearchControls;
 import rge.util.ResourceLoader;
 
@@ -12,6 +13,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.io.IOException;
 import java.net.URL;
@@ -26,6 +28,7 @@ public class Panel extends JPanel {
     private static final int TEXT_BOX_HEIGHT = 30;
     private static final int TEXT_BOX_Y_PADDING = 5;
     private static final int TEXT_BOX_X_PADDING = 15;
+    private static final Rectangle TEXT_BOX = new Rectangle(WINDOW_PADDING * 2, WINDOW_PADDING * 2, TEXT_BOX_WIDTH, TEXT_BOX_HEIGHT);
 
     private static final int ITEM_IMAGE_CONTAINER_PADDING = 4;
 
@@ -36,6 +39,7 @@ public class Panel extends JPanel {
         setDoubleBuffered(true);
         setFocusable(true);
         addKeyListener(new SearchControls(this));
+        addMouseMotionListener(new CursorListener(this));
     }
 
     public StringBuilder getSearchText() {
@@ -44,6 +48,10 @@ public class Panel extends JPanel {
 
     public void setSearchResult(Item searchResult) {
         this.searchResult = searchResult;
+    }
+
+    public Rectangle getSearchBox() {
+        return TEXT_BOX;
     }
 
     @Override
@@ -79,7 +87,7 @@ public class Panel extends JPanel {
 
     private void drawSearchBox(Graphics2D g2d) {
         g2d.setColor(new Color(1f, 1f, 1f, 0.9f));
-        g2d.fillRoundRect(WINDOW_PADDING * 2, WINDOW_PADDING * 2, TEXT_BOX_WIDTH, TEXT_BOX_HEIGHT, 5, 5);
+        g2d.fillRoundRect(TEXT_BOX.x, TEXT_BOX.y, TEXT_BOX.width, TEXT_BOX.height, 5, 5);
     }
 
     private void drawSearchText(Graphics2D g2d) {
