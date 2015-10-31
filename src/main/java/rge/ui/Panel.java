@@ -51,6 +51,7 @@ public class Panel extends JPanel {
     private static final int TEXT_BOX_X_PADDING = 15;
 
     private StringBuilder searchText = new StringBuilder();
+    private Item searchResult;
 
     public Panel() {
         setDoubleBuffered(true);
@@ -63,7 +64,8 @@ public class Panel extends JPanel {
                 char keyChar = e.getKeyChar();
 
                 if (isEnterCharacter(e) && searchText.length() > 0) {
-                    Item grandExchangeItem = search();
+                    searchResult = search();
+                    repaint();
                 } else if (isValidCharacter(keyChar)) {
                     searchText.append(keyChar);
                     repaint();
@@ -104,6 +106,11 @@ public class Panel extends JPanel {
         drawContainer(g2d);
         drawSearchBox(g2d);
         drawSearchText(g2d);
+
+        if (searchResult != null) {
+            drawItemName(g2d);
+            drawItemPrice(g2d);
+        }
     }
 
     private boolean drawBackground(Graphics2D g2d) {
@@ -141,5 +148,23 @@ public class Panel extends JPanel {
         }
 
         return searchText;
+    }
+
+    private void drawItemName(Graphics2D g2d) {
+        g2d.setColor(Color.YELLOW);
+        g2d.setFont(new Font("sans-serif", Font.BOLD, 14));
+        g2d.drawString(
+                searchResult.name,
+                WINDOW_PADDING * 2,
+                (WINDOW_PADDING * 3) + TEXT_BOX_HEIGHT + (TEXT_BOX_Y_PADDING * 2));
+    }
+
+    private void drawItemPrice(Graphics2D g2d) {
+        g2d.setColor(Color.YELLOW);
+        g2d.setFont(new Font("sans-serif", Font.BOLD, 14));
+        g2d.drawString(
+                searchResult.price + " coins",
+                WINDOW_PADDING * 2,
+                (WINDOW_PADDING * 4) + TEXT_BOX_HEIGHT + (TEXT_BOX_Y_PADDING * 2));
     }
 }
