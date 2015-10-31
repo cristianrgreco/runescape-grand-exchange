@@ -2,6 +2,7 @@ package rge.ui;
 
 import rge.engine.GrandExchange;
 import rge.engine.Item;
+import rge.util.ResourceLoader;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -9,39 +10,16 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 
 public class Panel extends JPanel {
-    private static final Image WINDOW_BACKGROUND;
-    private static final Font CUSTOM_FONT;
-
-    static {
-        try {
-            String filename = "background.png";
-            URL backgroundResource = Window.class.getClassLoader().getResource(filename);
-            if (backgroundResource == null) {
-                throw new FileNotFoundException("File '" + filename + "' not found!");
-            }
-            WINDOW_BACKGROUND = ImageIO.read(new File(backgroundResource.getFile()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            CUSTOM_FONT = Font.createFont(Font.TRUETYPE_FONT, Panel.class.getClassLoader().getResourceAsStream("font.ttf"));
-            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(CUSTOM_FONT);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private static final Image WINDOW_BACKGROUND = ResourceLoader.image("background.png", Panel.class);
+    private static final Font CUSTOM_FONT = ResourceLoader.font("font.ttf", Panel.class);
 
     private static final int WINDOW_PADDING = 20;
 
@@ -56,45 +34,7 @@ public class Panel extends JPanel {
     public Panel() {
         setDoubleBuffered(true);
         setFocusable(true);
-        addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                super.keyTyped(e);
-
-                char keyChar = e.getKeyChar();
-
-                if (isEnterCharacter(e) && searchText.length() > 0) {
-                    searchResult = search();
-                    repaint();
-                } else if (isValidCharacter(keyChar)) {
-                    searchText.append(keyChar);
-                    repaint();
-                } else if (isBackspaceCharacter(e) && searchText.length() > 0) {
-                    searchText.deleteCharAt(searchText.length() - 1);
-                    repaint();
-                }
-            }
-
-            private Item search() {
-                try {
-                    return GrandExchange.get(searchText.toString());
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-
-            private boolean isEnterCharacter(KeyEvent e) {
-                return (int) e.getKeyChar() == 10;
-            }
-
-            private boolean isValidCharacter(char keyChar) {
-                return Character.isAlphabetic(keyChar) || Character.isSpaceChar(keyChar);
-            }
-
-            private boolean isBackspaceCharacter(KeyEvent e) {
-                return (int) e.getKeyChar() == 8;
-            }
-        });
+        addKeyListener(new KeyboardControls());
     }
 
     @Override
@@ -203,6 +143,46 @@ public class Panel extends JPanel {
             return ImageIO.read(new URL(searchResult.imageUrl));
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private class KeyboardControls extends KeyAdapter {
+        @Override
+        public void keyTyped(KeyEvent e) {
+            super.keyTyped(e);
+
+            char keyChar = e.getKeyChar();
+
+            if (isEnterCharacter(e) && searchText.length() > 0) {
+                searchResult = search();
+                repaint();
+            } else if (isValidCharacter(keyChar)) {
+                searchText.append(keyChar);
+                repaint();
+            } else if (isBackspaceCharacter(e) && searchText.length() > 0) {
+                searchText.deleteCharAt(searchText.length() - 1);
+                repaint();
+            }
+        }
+
+        private Item search() {
+            try {
+                return GrandExchange.get(searchText.toString());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+
+        private boolean isEnterCharacter(KeyEvent e) {
+            return (int) e.getKeyChar() == 10;
+        }
+
+        private boolean isValidCharacter(char keyChar) {
+            return Character.isAlphabetic(keyChar) || Character.isSpaceChar(keyChar);
+        }
+
+        private boolean isBackspaceCharacter(KeyEvent e) {
+            return (int) e.getKeyChar() == 8;
         }
     }
 }
