@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
 import java.awt.RenderingHints;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -17,6 +18,7 @@ import java.net.URL;
 
 public class Panel extends JPanel {
     private static final BufferedImage WINDOW_BACKGROUND;
+    private static final Font CUSTOM_FONT;
 
     static {
         try {
@@ -29,13 +31,20 @@ public class Panel extends JPanel {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        try {
+            CUSTOM_FONT = Font.createFont(Font.TRUETYPE_FONT, Panel.class.getClassLoader().getResourceAsStream("font.ttf"));
+            GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(CUSTOM_FONT);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static final int WINDOW_PADDING = 20;
 
-    private static final int TEXTBOX_WIDTH = Window.SIZE.width - (WINDOW_PADDING * 4);
-    private static final int TEXTBOX_HEIGHT = 30;
-    private static final int TEXTBOX_PADDING = 5;
+    private static final int TEXT_BOX_WIDTH = Window.SIZE.width - (WINDOW_PADDING * 4);
+    private static final int TEXT_BOX_HEIGHT = 30;
+    private static final int TEXT_BOX_PADDING = 5;
 
     private StringBuilder searchText = new StringBuilder();
 
@@ -92,26 +101,29 @@ public class Panel extends JPanel {
 
     private void drawSearchBox(Graphics2D g2d) {
         g2d.setColor(new Color(1f, 1f, 1f, 0.9f));
-        g2d.fillRoundRect(WINDOW_PADDING * 2, WINDOW_PADDING * 2, TEXTBOX_WIDTH, TEXTBOX_HEIGHT, 5, 5);
+        g2d.fillRoundRect(WINDOW_PADDING * 2, WINDOW_PADDING * 2, TEXT_BOX_WIDTH, TEXT_BOX_HEIGHT, 5, 5);
     }
 
     private void drawSearchText(Graphics2D g2d) {
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-
         g2d.setColor(Color.decode("#3F3F3F"));
+        g2d.setFont(CUSTOM_FONT.deriveFont((float) 40 - (TEXT_BOX_PADDING * 3)));
 
-        g2d.setFont(new Font("sans-serif", Font.PLAIN, 40 - (TEXTBOX_PADDING * 3)));
-
-        String searchText = this.searchText.toString();
-
-        int stringWidth = g2d.getFontMetrics().stringWidth(searchText);
-        if (stringWidth > TEXTBOX_WIDTH - (TEXTBOX_PADDING * 3)) {
-            System.out.println("overflow");
-        }
-
+        String searchText = fitTextToSearchBox(g2d);
         g2d.drawString(
                 searchText,
-                (WINDOW_PADDING * 2) + TEXTBOX_PADDING,
-                WINDOW_PADDING * 2 + TEXTBOX_HEIGHT - TEXTBOX_PADDING);
+                (WINDOW_PADDING * 2) + TEXT_BOX_PADDING,
+                WINDOW_PADDING * 2 + TEXT_BOX_HEIGHT - TEXT_BOX_PADDING);
+    }
+
+    private String fitTextToSearchBox(Graphics2D g2d) {
+        int textBoxBounds = TEXT_BOX_WIDTH - (TEXT_BOX_PADDING * 3);
+
+        String searchText = this.searchText.toString();
+        while (g2d.getFontMetrics().stringWidth(searchText) > textBoxBounds) {
+            searchText = searchText.substring(1);
+        }
+
+        return searchText;
     }
 }
