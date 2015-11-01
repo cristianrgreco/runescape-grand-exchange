@@ -63,6 +63,7 @@ public class Panel extends JPanel {
         drawContainer(g2d);
         drawSearchBox(g2d);
         drawSearchText(g2d);
+        drawSearchBoxCursor(g2d);
 
         if (searchResult != null) {
             drawItemContainer(g2d);
@@ -109,12 +110,23 @@ public class Panel extends JPanel {
     private String fitTextToSearchBox(Graphics2D g2d) {
         int textBoxBounds = TEXT_BOX_WIDTH - (TEXT_BOX_X_PADDING * 2);
 
-        String searchText = this.searchText.toString();
-        while (g2d.getFontMetrics().stringWidth(searchText.toUpperCase()) > textBoxBounds) {
+        String searchText = this.searchText.toString().toUpperCase();
+        while (g2d.getFontMetrics().stringWidth(searchText) > textBoxBounds) {
             searchText = searchText.substring(1);
         }
 
         return searchText;
+    }
+
+    private void drawSearchBoxCursor(Graphics2D g2d) {
+        int stringWidth = g2d.getFontMetrics().stringWidth(fitTextToSearchBox(g2d));
+
+        g2d.setColor(Color.decode("#3F3F3F"));
+        g2d.drawLine(
+                TEXT_BOX.x + TEXT_BOX_X_PADDING + stringWidth,
+                TEXT_BOX.y + TEXT_BOX_Y_PADDING,
+                TEXT_BOX.x + TEXT_BOX_X_PADDING + stringWidth,
+                TEXT_BOX.y + TEXT_BOX.height - TEXT_BOX_Y_PADDING);
     }
 
     private void drawItemContainer(Graphics2D g2d) {
