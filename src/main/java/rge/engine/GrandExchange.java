@@ -18,21 +18,18 @@ public class GrandExchange {
 
     public static Item get(String itemName) throws IOException {
         String requestUrl = createRequestUrl(itemName);
+
         Document document = downloadWebDocument(requestUrl);
         if (document == null) {
             return new Item(NOT_FOUND_TEXT, null, null);
         }
-        Element imgElement = parseImageElement(document);
 
-        String name = NOT_FOUND_TEXT;
-        String price = parseItemPrice(document);
-        String imageUrl = null;
-        if (imgElement != null) {
-            imageUrl = parseImageUrl(imgElement);
-            name = parseItemName(imgElement);
+        Element imgElement = parseImageElement(document);
+        if (imgElement == null) {
+            return new Item(NOT_FOUND_TEXT, parseItemPrice(document), null);
         }
 
-        return new Item(name, price, imageUrl);
+        return new Item(parseItemName(imgElement), parseItemPrice(document), parseImageUrl(imgElement));
     }
 
     private static String createRequestUrl(String itemName) {
