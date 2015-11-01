@@ -1,6 +1,7 @@
 package rge.engine;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,6 +19,9 @@ public class GrandExchange {
     public static Item get(String itemName) throws IOException {
         String requestUrl = createRequestUrl(itemName);
         Document document = downloadWebDocument(requestUrl);
+        if (document == null) {
+            return new Item(NOT_FOUND_TEXT, null, null);
+        }
         Element imgElement = parseImageElement(document);
 
         String name = NOT_FOUND_TEXT;
@@ -36,7 +40,11 @@ public class GrandExchange {
     }
 
     private static Document downloadWebDocument(String requestUrl) throws IOException {
-        return Jsoup.connect(requestUrl).get();
+        try {
+            return Jsoup.connect(requestUrl).get();
+        } catch (HttpStatusException e) {
+            return null;
+        }
     }
 
     private static Element parseImageElement(Document document) {

@@ -2,9 +2,11 @@ package rge.integration;
 
 import org.junit.Test;
 import rge.engine.GrandExchange;
+import rge.engine.Item;
 
 import java.io.IOException;
 
+import static com.shazam.shazamcrest.matcher.Matchers.sameBeanAs;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -51,5 +53,15 @@ public class GrandExchangeTest {
     @Test
     public void fetchesGrandExchangePrice3() throws IOException {
         assertThat(GrandExchange.get("Crystal seed").price, nullValue());
+    }
+
+    @Test
+    public void handlesItemsWhichDoNotExist() throws IOException {
+        assertThat(GrandExchange.get("What"), sameBeanAs(new Item("Not found", null, null)));
+    }
+
+    @Test
+    public void handlesInvalidUrls() throws IOException {
+        assertThat(GrandExchange.get("Hi"), sameBeanAs(new Item("Not found", null, null)));
     }
 }
