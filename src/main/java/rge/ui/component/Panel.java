@@ -172,11 +172,12 @@ public class Panel extends JPanel {
         int containerHeight = Window.SIZE.height - (WINDOW_PADDING * 7);
         int imageHeight = itemImage.getHeight(this);
         int topOfContainer = WINDOW_PADDING * 4;
+        int middleOfContainer = (containerHeight - imageHeight) / 2;
 
         g2d.drawImage(
                 itemImage,
                 Window.SIZE.width - (WINDOW_PADDING * 3) - itemImage.getWidth(this) + (ITEM_IMAGE_CONTAINER_PADDING / 2),
-                (ITEM_IMAGE_CONTAINER_PADDING / 2) + topOfContainer + ((containerHeight - imageHeight) / 2) - (ITEM_IMAGE_CONTAINER_PADDING / 2),
+                (ITEM_IMAGE_CONTAINER_PADDING / 2) + topOfContainer + middleOfContainer - (ITEM_IMAGE_CONTAINER_PADDING / 2),
                 this);
     }
 
@@ -186,10 +187,11 @@ public class Panel extends JPanel {
         int containerHeight = Window.SIZE.height - (WINDOW_PADDING * 7);
         int imageHeight = itemImage.getHeight(this);
         int topOfContainer = WINDOW_PADDING * 4;
+        int middleOfContainer = (containerHeight - imageHeight) / 2;
 
         g2d.fillRoundRect(
                 Window.SIZE.width - (WINDOW_PADDING * 3) - itemImage.getWidth(this),
-                topOfContainer + ((containerHeight - imageHeight) / 2) - (ITEM_IMAGE_CONTAINER_PADDING / 2),
+                topOfContainer + middleOfContainer - (ITEM_IMAGE_CONTAINER_PADDING / 2),
                 itemImage.getWidth(this) + ITEM_IMAGE_CONTAINER_PADDING,
                 itemImage.getHeight(this) + ITEM_IMAGE_CONTAINER_PADDING, 5, 5);
     }
