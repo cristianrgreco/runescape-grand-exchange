@@ -107,7 +107,7 @@ public class Panel extends JPanel {
     }
 
     private String fitTextToSearchBox(Graphics2D g2d) {
-        int textBoxBounds = TEXT_BOX_WIDTH - (int) (TEXT_BOX_X_PADDING * 1.5);
+        int textBoxBounds = TEXT_BOX.width - (WINDOW_PADDING * 3);
 
         String searchText = this.searchText.toString();
         while (g2d.getFontMetrics().stringWidth(searchText) > textBoxBounds) {
