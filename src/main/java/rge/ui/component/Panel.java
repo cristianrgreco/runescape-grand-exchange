@@ -4,6 +4,7 @@ import rge.engine.GrandExchange;
 import rge.engine.Item;
 import rge.ui.listener.CursorListener;
 import rge.ui.listener.SearchControls;
+import rge.ui.task.Cursor;
 import rge.util.ResourceLoader;
 
 import javax.imageio.ImageIO;
@@ -25,6 +26,7 @@ public class Panel extends JPanel {
     private static final Color TEXT_COLOUR = Color.decode("#3F3F3F");
 
     private static final int WINDOW_PADDING = 20;
+    private static final int ITEM_IMAGE_CONTAINER_PADDING = 4;
 
     private static final int TEXT_BOX_WIDTH = Window.SIZE.width - (WINDOW_PADDING * 4);
     private static final int TEXT_BOX_HEIGHT = 30;
@@ -32,8 +34,7 @@ public class Panel extends JPanel {
     private static final int TEXT_BOX_X_PADDING = 15;
     private static final Rectangle TEXT_BOX = new Rectangle(WINDOW_PADDING * 2, WINDOW_PADDING * 2, TEXT_BOX_WIDTH, TEXT_BOX_HEIGHT);
 
-    private static final int ITEM_IMAGE_CONTAINER_PADDING = 4;
-
+    private Cursor cursorTask;
     private StringBuilder searchText = new StringBuilder();
     private Item searchResult;
 
@@ -42,6 +43,7 @@ public class Panel extends JPanel {
         setFocusable(true);
         addKeyListener(new SearchControls(this));
         addMouseMotionListener(new CursorListener(this));
+        cursorTask = new Cursor(this);
     }
 
     public StringBuilder getSearchText() {
@@ -65,7 +67,9 @@ public class Panel extends JPanel {
         drawContainer(g2d);
         drawSearchBox(g2d);
         drawSearchText(g2d);
-        drawSearchBoxCursor(g2d);
+        if (cursorTask.isCursorVisible()) {
+            drawSearchBoxCursor(g2d);
+        }
 
         if (searchResult != null) {
             drawItemContainer(g2d);
