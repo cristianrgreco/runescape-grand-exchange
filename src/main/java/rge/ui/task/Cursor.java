@@ -12,6 +12,7 @@ public class Cursor extends TimerTask {
     private Panel panel;
 
     private AtomicBoolean cursorVisible = new AtomicBoolean(false);
+
     private long lastTimeCheck = System.currentTimeMillis();
     private String lastSearchCheck = "";
 

@@ -5,8 +5,6 @@ public class Parser {
     }
 
     public static String parse(String input) {
-        return input
-                .replace(' ', '_')
-                .toLowerCase();
+        return input.replace(' ', '_').toLowerCase();
     }
 }

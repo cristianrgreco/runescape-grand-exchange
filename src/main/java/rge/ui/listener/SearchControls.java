@@ -9,6 +9,9 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 public class SearchControls extends KeyAdapter {
+    private static final int ENTER_CHARACTER_CODE = 10;
+    private static final int BACKSPACE_CHARACTER_CODE = 8;
+
     private Panel panel;
 
     public SearchControls(Panel panel) {
@@ -44,7 +47,7 @@ public class SearchControls extends KeyAdapter {
     }
 
     private boolean isEnterCharacter(KeyEvent e) {
-        return (int) e.getKeyChar() == 10;
+        return (int) e.getKeyChar() == ENTER_CHARACTER_CODE;
     }
 
     private boolean isValidCharacter(char keyChar) {
@@ -52,6 +55,6 @@ public class SearchControls extends KeyAdapter {
     }
 
     private boolean isBackspaceCharacter(KeyEvent e) {
-        return (int) e.getKeyChar() == 8;
+        return (int) e.getKeyChar() == BACKSPACE_CHARACTER_CODE;
     }
 }

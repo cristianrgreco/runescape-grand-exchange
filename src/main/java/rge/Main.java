@@ -8,6 +8,10 @@ import javax.swing.SwingUtilities;
 
 public class Main {
     public static void main(String[] args) {
+        createAndShowGui();
+    }
+
+    private static void createAndShowGui() {
         SwingUtilities.invokeLater(() -> {
             JFrame.setDefaultLookAndFeelDecorated(true);
             new Window(new Panel());
