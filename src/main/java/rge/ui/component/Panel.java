@@ -22,6 +22,8 @@ public class Panel extends JPanel {
     private static final Image WINDOW_BACKGROUND = ResourceLoader.image("background.png", Panel.class);
     private static final Font CUSTOM_FONT = ResourceLoader.font("font.ttf", Panel.class);
 
+    private static final Color TEXT_COLOUR = Color.decode("#3F3F3F");
+
     private static final int WINDOW_PADDING = 20;
 
     private static final int TEXT_BOX_WIDTH = Window.SIZE.width - (WINDOW_PADDING * 4);
@@ -97,7 +99,7 @@ public class Panel extends JPanel {
 
     private void drawSearchText(Graphics2D g2d) {
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        g2d.setColor(Color.decode("#3F3F3F"));
+        g2d.setColor(TEXT_COLOUR);
         g2d.setFont(CUSTOM_FONT.deriveFont((float) 40 - (TEXT_BOX_Y_PADDING * 3)));
 
         String searchText = fitTextToSearchBox(g2d);
@@ -121,7 +123,7 @@ public class Panel extends JPanel {
     private void drawSearchBoxCursor(Graphics2D g2d) {
         int stringWidth = g2d.getFontMetrics().stringWidth(fitTextToSearchBox(g2d));
 
-        g2d.setColor(Color.decode("#3F3F3F"));
+        g2d.setColor(TEXT_COLOUR);
         g2d.drawLine(
                 TEXT_BOX.x + TEXT_BOX_X_PADDING + stringWidth,
                 TEXT_BOX.y + TEXT_BOX_Y_PADDING,
@@ -141,6 +143,7 @@ public class Panel extends JPanel {
             g2d.setColor(Color.YELLOW);
         }
         g2d.setFont(CUSTOM_FONT.deriveFont((float) 16));
+
         g2d.drawString(
                 searchResult.name,
                 WINDOW_PADDING * 3,
@@ -150,6 +153,7 @@ public class Panel extends JPanel {
     private void drawItemPrice(Graphics2D g2d) {
         g2d.setColor(Color.YELLOW);
         g2d.setFont(CUSTOM_FONT.deriveFont((float) 16));
+
         g2d.drawString(
                 searchResult.price + (searchResult.price != null ? " coins" : ""),
                 WINDOW_PADDING * 3,
@@ -183,9 +187,7 @@ public class Panel extends JPanel {
                 Window.SIZE.width - (WINDOW_PADDING * 3) - itemImage.getWidth(this),
                 topOfContainer + ((containerHeight - imageHeight) / 2) - (ITEM_IMAGE_CONTAINER_PADDING / 2),
                 itemImage.getWidth(this) + ITEM_IMAGE_CONTAINER_PADDING,
-                itemImage.getHeight(this) + ITEM_IMAGE_CONTAINER_PADDING,
-                5,
-                5);
+                itemImage.getHeight(this) + ITEM_IMAGE_CONTAINER_PADDING, 5, 5);
     }
 
     private Image downloadItemImage() {
