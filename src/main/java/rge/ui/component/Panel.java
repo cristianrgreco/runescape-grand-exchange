@@ -1,5 +1,6 @@
 package rge.ui.component;
 
+import rge.engine.GrandExchange;
 import rge.engine.Item;
 import rge.ui.listener.CursorListener;
 import rge.ui.listener.SearchControls;
@@ -122,7 +123,11 @@ public class Panel extends JPanel {
     }
 
     private void drawItemName(Graphics2D g2d) {
-        g2d.setColor(Color.YELLOW);
+        if (GrandExchange.NOT_FOUND_TEXT.equals(searchResult.name)) {
+            g2d.setColor(Color.RED);
+        } else {
+            g2d.setColor(Color.YELLOW);
+        }
         g2d.setFont(CUSTOM_FONT.deriveFont((float) 16));
         g2d.drawString(
                 searchResult.name,
