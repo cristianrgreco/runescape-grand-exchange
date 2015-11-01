@@ -6,6 +6,7 @@ import rge.engine.GrandExchange;
 import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.CombinableMatcher.both;
@@ -49,6 +50,6 @@ public class GrandExchangeTest {
 
     @Test
     public void fetchesGrandExchangePrice3() throws IOException {
-        assertThat(GrandExchange.get("Crystal seed").price, equalTo("Not sold"));
+        assertThat(GrandExchange.get("Crystal seed").price, nullValue());
     }
 }

@@ -8,9 +8,9 @@ import org.jsoup.nodes.Element;
 import java.io.IOException;
 
 public class GrandExchange {
-    public static final String NOT_SOLD_TEXT = "Not sold";
-
     private static final String BASE_URL = "http://runescape.wikia.com/wiki/";
+
+    public static final String NOT_FOUND_TEXT = "Not found";
 
     private GrandExchange() {
     }
@@ -20,9 +20,13 @@ public class GrandExchange {
         Document document = downloadWebDocument(requestUrl);
         Element imgElement = parseImageElement(document);
 
+        String name = NOT_FOUND_TEXT;
         String price = parseItemPrice(document);
-        String imageUrl = parseImageUrl(imgElement);
-        String name = parseItemName(imgElement);
+        String imageUrl = null;
+        if (imgElement != null) {
+            imageUrl = parseImageUrl(imgElement);
+            name = parseItemName(imgElement);
+        }
 
         return new Item(name, price, imageUrl);
     }
@@ -37,7 +41,7 @@ public class GrandExchange {
 
     private static Element parseImageElement(Document document) {
         Element imgElement = document.select(".wikitable.infobox .infoboximage a.image img").first();
-        if (imgElement.attr("src").startsWith("data:")) {
+        if (imgElement != null && imgElement.attr("src").startsWith("data:")) {
             imgElement = document.select(".wikitable.infobox .infoboximage a.image noscript img").first();
         }
         return imgElement;
@@ -46,7 +50,7 @@ public class GrandExchange {
     private static String parseItemPrice(Document document) {
         Element priceElement = document.select("#GEPrice .GEItem > span").first();
         if (priceElement == null) {
-            return NOT_SOLD_TEXT;
+            return null;
         }
         return priceElement.text();
     }

@@ -1,5 +1,6 @@
 package rge.ui.listener;
 
+import org.jsoup.HttpStatusException;
 import rge.engine.GrandExchange;
 import rge.engine.Item;
 import rge.ui.component.Panel;
@@ -38,8 +39,13 @@ public class SearchControls extends KeyAdapter {
     private Item search() {
         try {
             return GrandExchange.get(panel.getSearchText().toString());
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
+        } catch (HttpStatusException e) {
+            if (e.getStatusCode() == 404) {
+                return new Item(GrandExchange.NOT_FOUND_TEXT, null, null);
+            }
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
