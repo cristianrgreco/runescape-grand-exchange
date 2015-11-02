@@ -117,7 +117,7 @@ public class Panel extends JPanel {
                 WINDOW_PADDING * 2 + TEXT_BOX_HEIGHT - (int) (TEXT_BOX_Y_PADDING * 1.5));
     }
 
-    private static String fitTextToSearchBox(String searchText, Graphics2D g2d) {
+    private String fitTextToSearchBox(String searchText, Graphics2D g2d) {
         int textBoxBounds = TEXT_BOX_WIDTH - (TEXT_BOX_X_PADDING * 2);
 
         while (g2d.getFontMetrics().stringWidth(searchText) > textBoxBounds) {
@@ -129,7 +129,14 @@ public class Panel extends JPanel {
 
     private void drawSearchBoxCursor(Graphics2D g2d) {
         String searchText = fitTextToSearchBox(this.searchText.toString().toUpperCase(), g2d);
-        String searchTextSubstringToCursor = searchText.substring(0, searchText.length() - cursorTask.getCursorIndex());
+
+        String searchTextSubstringToCursor;
+        if (cursorIsBeforeTrimmedText(searchText)) {
+            searchTextSubstringToCursor = "";
+        } else {
+            searchTextSubstringToCursor = searchText.substring(0, searchText.length() - cursorTask.getCursorIndex());
+        }
+
         int stringWidth = g2d.getFontMetrics().stringWidth(fitTextToSearchBox(searchTextSubstringToCursor, g2d));
 
         g2d.setColor(TEXT_COLOUR);
@@ -138,6 +145,10 @@ public class Panel extends JPanel {
                 TEXT_BOX.y + TEXT_BOX_Y_PADDING,
                 TEXT_BOX.x + TEXT_BOX_X_PADDING + stringWidth,
                 TEXT_BOX.y + TEXT_BOX.height - TEXT_BOX_Y_PADDING);
+    }
+
+    private boolean cursorIsBeforeTrimmedText(String searchText) {
+        return cursorTask.getCursorIndex() >= searchText.length();
     }
 
     private void drawItemContainer(Graphics2D g2d) {
