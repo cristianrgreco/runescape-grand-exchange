@@ -16,6 +16,7 @@ public class Cursor extends TimerTask {
 
     private long lastTimeCheck = System.currentTimeMillis();
     private String lastSearchCheck = "";
+    private int lastCursorIndexCheck = getCursorIndex();
 
     public Cursor(Panel panel) {
         this.panel = panel;
@@ -24,11 +25,13 @@ public class Cursor extends TimerTask {
 
     @Override
     public void run() {
-        String newSearchCheck = panel.getSearchText().toString();
         long newTimeCheck = System.currentTimeMillis();
+        String newSearchCheck = panel.getSearchText().toString();
+        int newCursorIndexCheck = panel.getCursorTask().getCursorIndex();
 
-        if (userIsEnteringText(newSearchCheck, newTimeCheck)) {
+        if (userIsEnteringText(newSearchCheck, newTimeCheck) || userIsMovingCursor(newCursorIndexCheck, newTimeCheck)) {
             lastSearchCheck = newSearchCheck;
+            lastCursorIndexCheck = newCursorIndexCheck;
             cursorVisible.set(true);
         } else {
             cursorVisible.set(!cursorVisible.get());
@@ -40,6 +43,10 @@ public class Cursor extends TimerTask {
 
     private boolean userIsEnteringText(String newSearchCheck, long newTimeCheck) {
         return !lastSearchCheck.equals(newSearchCheck) && newTimeCheck - lastTimeCheck < (KEY_REPEAT_RATE * 2);
+    }
+
+    private boolean userIsMovingCursor(int newCursorIndexCheck, long newTimeCheck) {
+        return lastCursorIndexCheck != newCursorIndexCheck && newTimeCheck - lastTimeCheck < (KEY_REPEAT_RATE * 2);
     }
 
     public boolean isCursorVisible() {
