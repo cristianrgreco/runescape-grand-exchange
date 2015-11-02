@@ -42,11 +42,15 @@ public class Cursor extends TimerTask {
     }
 
     private boolean userIsEnteringText(String newSearchCheck, long newTimeCheck) {
-        return !lastSearchCheck.equals(newSearchCheck) && newTimeCheck - lastTimeCheck < (KEY_REPEAT_RATE * 2);
+        return !lastSearchCheck.equals(newSearchCheck) && isWithinTimeConstraints(newTimeCheck);
     }
 
     private boolean userIsMovingCursor(int newCursorIndexCheck, long newTimeCheck) {
-        return lastCursorIndexCheck != newCursorIndexCheck && newTimeCheck - lastTimeCheck < (KEY_REPEAT_RATE * 2);
+        return lastCursorIndexCheck != newCursorIndexCheck && isWithinTimeConstraints(newTimeCheck);
+    }
+
+    private boolean isWithinTimeConstraints(long newTimeCheck) {
+        return newTimeCheck - lastTimeCheck < (KEY_REPEAT_RATE * 2);
     }
 
     public boolean isCursorVisible() {
