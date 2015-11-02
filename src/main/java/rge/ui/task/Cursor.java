@@ -11,6 +11,7 @@ public class Cursor extends TimerTask {
 
     private Panel panel;
 
+    private int cursorIndex = 0;
     private AtomicBoolean cursorVisible = new AtomicBoolean(false);
 
     private long lastTimeCheck = System.currentTimeMillis();
@@ -43,5 +44,21 @@ public class Cursor extends TimerTask {
 
     public boolean isCursorVisible() {
         return cursorVisible.get();
+    }
+
+    public int getCursorIndex() {
+        return cursorIndex;
+    }
+
+    public void moveCursorLeft() {
+        if (cursorIndex >= 0 && cursorIndex < panel.getSearchText().length()) {
+            cursorIndex++;
+        }
+    }
+
+    public void moveCursorRight() {
+        if (cursorIndex > 0) {
+            cursorIndex--;
+        }
     }
 }

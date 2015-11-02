@@ -58,6 +58,10 @@ public class Panel extends JPanel {
         return TEXT_BOX;
     }
 
+    public Cursor getCursorTask() {
+        return cursorTask;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -106,17 +110,16 @@ public class Panel extends JPanel {
         g2d.setColor(TEXT_COLOUR);
         g2d.setFont(CUSTOM_FONT.deriveFont((float) 40 - (TEXT_BOX_Y_PADDING * 3)));
 
-        String searchText = fitTextToSearchBox(g2d);
+        String searchText = fitTextToSearchBox(this.searchText.toString().toUpperCase(), g2d);
         g2d.drawString(
                 searchText.toUpperCase(),
                 (WINDOW_PADDING * 2) + TEXT_BOX_X_PADDING,
                 WINDOW_PADDING * 2 + TEXT_BOX_HEIGHT - (int) (TEXT_BOX_Y_PADDING * 1.5));
     }
 
-    private String fitTextToSearchBox(Graphics2D g2d) {
+    private static String fitTextToSearchBox(String searchText, Graphics2D g2d) {
         int textBoxBounds = TEXT_BOX_WIDTH - (TEXT_BOX_X_PADDING * 2);
 
-        String searchText = this.searchText.toString().toUpperCase();
         while (g2d.getFontMetrics().stringWidth(searchText) > textBoxBounds) {
             searchText = searchText.substring(1);
         }
@@ -125,7 +128,9 @@ public class Panel extends JPanel {
     }
 
     private void drawSearchBoxCursor(Graphics2D g2d) {
-        int stringWidth = g2d.getFontMetrics().stringWidth(fitTextToSearchBox(g2d));
+        String searchText = this.searchText.toString().toUpperCase();
+        String searchTextSubstringToCursor = searchText.substring(0, searchText.length() - cursorTask.getCursorIndex());
+        int stringWidth = g2d.getFontMetrics().stringWidth(fitTextToSearchBox(searchTextSubstringToCursor, g2d));
 
         g2d.setColor(TEXT_COLOUR);
         g2d.drawLine(

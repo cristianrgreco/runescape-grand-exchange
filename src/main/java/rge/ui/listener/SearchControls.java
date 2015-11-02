@@ -19,7 +19,7 @@ public class SearchControls extends KeyAdapter {
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
+    public void keyReleased(KeyEvent e) {
         super.keyTyped(e);
 
         char keyChar = e.getKeyChar();
@@ -29,10 +29,18 @@ public class SearchControls extends KeyAdapter {
                 panel.setSearchResult(search());
                 panel.repaint();
             } else if (isValidCharacter(keyChar)) {
-                panel.getSearchText().append(keyChar);
+                int positionAtCursor = panel.getSearchText().length() - panel.getCursorTask().getCursorIndex();
+                panel.getSearchText().insert(positionAtCursor, keyChar);
                 panel.repaint();
             } else if (isBackspaceCharacter(e) && panel.getSearchText().length() > 0) {
-                panel.getSearchText().deleteCharAt(panel.getSearchText().length() - 1);
+                int positionAtCursor = panel.getSearchText().length() - 1 - panel.getCursorTask().getCursorIndex();
+                panel.getSearchText().deleteCharAt(positionAtCursor);
+                panel.repaint();
+            } else if (isLeftArrowKey(e)) {
+                panel.getCursorTask().moveCursorLeft();
+                panel.repaint();
+            } else if (isRightArrowKey(e)) {
+                panel.getCursorTask().moveCursorRight();
                 panel.repaint();
             }
         }
@@ -47,7 +55,7 @@ public class SearchControls extends KeyAdapter {
     }
 
     private boolean isEnterCharacter(KeyEvent e) {
-        return (int) e.getKeyChar() == ENTER_CHARACTER_CODE;
+        return e.getKeyCode() == KeyEvent.VK_ENTER;
     }
 
     private boolean isValidCharacter(char keyChar) {
@@ -55,6 +63,14 @@ public class SearchControls extends KeyAdapter {
     }
 
     private boolean isBackspaceCharacter(KeyEvent e) {
-        return (int) e.getKeyChar() == BACKSPACE_CHARACTER_CODE;
+        return e.getKeyCode() == KeyEvent.VK_BACK_SPACE;
+    }
+
+    private boolean isLeftArrowKey(KeyEvent e) {
+        return e.getKeyCode() == KeyEvent.VK_LEFT;
+    }
+
+    private boolean isRightArrowKey(KeyEvent e) {
+        return e.getKeyCode() == KeyEvent.VK_RIGHT;
     }
 }
