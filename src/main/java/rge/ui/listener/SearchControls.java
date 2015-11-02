@@ -21,15 +21,13 @@ public class SearchControls extends KeyAdapter {
     public void keyPressed(KeyEvent e) {
         super.keyTyped(e);
 
-        char keyChar = e.getKeyChar();
-
         synchronized (SearchControls.class) {
             if (isEnterCharacter(e) && panel.getSearchText().length() > 0) {
                 panel.setSearchResult(search());
                 panel.repaint();
-            } else if (isValidCharacter(keyChar)) {
+            } else if (isValidCharacter(e.getKeyChar())) {
                 int positionAtCursor = panel.getSearchText().length() - panel.getCursorTask().getCursorIndex();
-                panel.getSearchText().insert(positionAtCursor, keyChar);
+                panel.getSearchText().insert(positionAtCursor, e.getKeyChar());
                 panel.repaint();
             } else if (isBackspaceCharacter(e) && panel.getSearchText().length() > 0) {
                 int positionAtCursor = panel.getSearchText().length() - 1 - panel.getCursorTask().getCursorIndex();
