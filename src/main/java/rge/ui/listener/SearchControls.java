@@ -9,8 +9,7 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 public class SearchControls extends KeyAdapter {
-    private static final int ENTER_CHARACTER_CODE = 10;
-    private static final int BACKSPACE_CHARACTER_CODE = 8;
+    public static final int KEY_REPEAT_RATE = 500;
 
     private Panel panel;
 
@@ -19,7 +18,7 @@ public class SearchControls extends KeyAdapter {
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
+    public void keyPressed(KeyEvent e) {
         super.keyTyped(e);
 
         char keyChar = e.getKeyChar();

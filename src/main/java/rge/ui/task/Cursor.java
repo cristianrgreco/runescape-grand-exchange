@@ -1,14 +1,13 @@
 package rge.ui.task;
 
 import rge.ui.component.Panel;
+import rge.ui.listener.SearchControls;
 
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Cursor extends TimerTask {
-    private static final int KEY_REPEAT_RATE = 500;
-
     private Panel panel;
 
     private int cursorIndex = 0;
@@ -20,7 +19,7 @@ public class Cursor extends TimerTask {
 
     public Cursor(Panel panel) {
         this.panel = panel;
-        new Timer().scheduleAtFixedRate(this, 0, KEY_REPEAT_RATE);
+        new Timer().scheduleAtFixedRate(this, 0, SearchControls.KEY_REPEAT_RATE);
     }
 
     @Override
@@ -50,7 +49,7 @@ public class Cursor extends TimerTask {
     }
 
     private boolean isWithinTimeConstraints(long newTimeCheck) {
-        return newTimeCheck - lastTimeCheck < (KEY_REPEAT_RATE * 2);
+        return newTimeCheck - lastTimeCheck < (SearchControls.KEY_REPEAT_RATE * 2);
     }
 
     public boolean isCursorVisible() {
