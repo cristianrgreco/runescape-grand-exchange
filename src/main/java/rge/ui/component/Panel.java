@@ -128,7 +128,7 @@ public class Panel extends JPanel {
     }
 
     private void drawSearchBoxCursor(Graphics2D g2d) {
-        String searchText = this.searchText.toString().toUpperCase();
+        String searchText = fitTextToSearchBox(this.searchText.toString().toUpperCase(), g2d);
         String searchTextSubstringToCursor = searchText.substring(0, searchText.length() - cursorTask.getCursorIndex());
         int stringWidth = g2d.getFontMetrics().stringWidth(fitTextToSearchBox(searchTextSubstringToCursor, g2d));
 
