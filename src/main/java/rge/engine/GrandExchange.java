@@ -45,9 +45,9 @@ public class GrandExchange {
     }
 
     private static Element parseImageElement(Document document) {
-        Element imgElement = document.select(".wikitable.infobox .infoboximage a.image img").first();
+        Element imgElement = document.select(".wikitable.infobox .infobox-image a.image img").first();
         if (imgElement != null && imgElement.attr("src").startsWith("data:")) {
-            imgElement = document.select(".wikitable.infobox .infoboximage a.image noscript img").first();
+            imgElement = document.select(".wikitable.infobox .infobox-image a.image noscript img").first();
         }
         return imgElement;
     }
