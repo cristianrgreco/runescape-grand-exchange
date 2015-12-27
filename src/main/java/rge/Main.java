@@ -3,8 +3,8 @@ package rge;
 import rge.ui.component.Panel;
 import rge.ui.component.Window;
 
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,7 +13,11 @@ public class Main {
 
     private static void createAndShowGui() {
         SwingUtilities.invokeLater(() -> {
-            JFrame.setDefaultLookAndFeelDecorated(true);
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             new Window(new Panel());
         });
     }
