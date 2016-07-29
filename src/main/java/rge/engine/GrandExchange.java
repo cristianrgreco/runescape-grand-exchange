@@ -53,7 +53,7 @@ public class GrandExchange {
     }
 
     private static String parseItemPrice(Document document) {
-        Element priceElement = document.select("#GEPrice .GEItem > span").first();
+        Element priceElement = document.select(".wikitable.infobox .infobox-quantity .infobox-quantity-replace").first();
         if (priceElement == null) {
             return null;
         }
