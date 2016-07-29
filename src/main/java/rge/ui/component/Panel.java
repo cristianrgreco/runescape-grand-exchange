@@ -120,8 +120,15 @@ public class Panel extends JPanel {
     private String fitTextToSearchBox(String searchText, Graphics2D g2d) {
         int textBoxBounds = TEXT_BOX_WIDTH - (TEXT_BOX_X_PADDING * 2);
 
+        int i = 1;
         while (g2d.getFontMetrics().stringWidth(searchText) > textBoxBounds) {
-            searchText = searchText.substring(1);
+            if (cursorIsBeforeTrimmedText(searchText)) {
+                String st = this.searchText.toString().toUpperCase();
+                searchText = st.substring(st.length() - cursorTask.getCursorIndex(), st.length() - i);
+                i++;
+            } else {
+                searchText = searchText.substring(1);
+            }
         }
 
         return searchText;
